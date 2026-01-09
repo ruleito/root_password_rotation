@@ -443,5 +443,6 @@ MIT
 5. Откройте Pull Request
 
 ## Автор
-
 [@ruleito](https://github.com/ruleito)
+
+docs gen by [cloude](https://claude.ai/)
