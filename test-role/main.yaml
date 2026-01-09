@@ -1,0 +1,9 @@
+---
+- name: Test Vault Connection
+  hosts: all
+  gather_facts: yes
+  tasks:
+    - name: Include pass role
+      include_role:
+        name: pass
+
