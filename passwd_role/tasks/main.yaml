@@ -1,0 +1,5 @@
+- name: "Change pass play"
+  block:
+    - name: "Operate password ratetion policy"
+      include_tasks: pass_policy.yaml
+  tags: def_pass_policy

@@ -1,0 +1,5 @@
+---
+vault_path: "secret/data/hosts"
+user: "root" # default user
+pass_enc_type: "hex" # default gen type
+pass_length: 16

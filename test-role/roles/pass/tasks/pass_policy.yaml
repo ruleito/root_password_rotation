@@ -1,0 +1,38 @@
+---
+- name: Read password from Vault
+  community.hashi_vault.vault_read:
+    url: "{{ lookup('env', 'VAULT_ADDR') }}"
+    token: "{{ lookup('env', 'VAULT_TOKEN') }}"
+    path: "{{ vault_path }}/{{ inventory_hostname }}"
+    validate_certs: false
+  register: vault_data
+  delegate_to: localhost
+  ignore_errors: yes
+  failed_when: false
+  no_log: true
+
+- name: Rotate password
+  change_user_password:
+    username: "{{ user }}"
+    vault_hash: "{{ vault_data.data.data.data.root_hash | default('') }}"
+    pass_enc_type: "{{ pass_enc_type }}"
+    password_length: "{{ pass_length }}"
+  register: password_result
+  when: vault_data.failed or (vault_data.data.data.data.root_hash | default('')) == ''
+  no_log: true
+
+- name: Update Vault
+  community.hashi_vault.vault_write:
+    url: "{{ lookup('env', 'VAULT_ADDR') }}"
+    token: "{{ lookup('env', 'VAULT_TOKEN') }}"
+    path: "{{ vault_path }}/{{ inventory_hostname }}"
+    validate_certs: false
+    data:
+      data:
+        hostname: "{{ inventory_hostname }}"
+        root_plain: "{{ password_result.plaintext }}"
+        root_hash: "{{ password_result.hash }}"
+        last_rotated: "{{ ansible_date_time.iso8601 }}"
+  delegate_to: localhost
+  when: password_result.changed | default(false)
+  no_log: true
