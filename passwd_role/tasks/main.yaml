@@ -1,5 +1,13 @@
 - name: "Change pass play"
   block:
+    - name: "Check Vault health"
+      ansible.builtin.uri:
+        url: "{{ lookup('env', 'VAULT_ADDR') }}/v1/sys/health"
+        method: GET
+        return_content: no
+        status_code: [ 200, 429, 472 ]
+      register: vault_health
     - name: "Operate password ratetion policy"
       include_tasks: pass_policy.yaml
+      when: vault_health.status == 200
   tags: def_pass_policy

@@ -6,9 +6,8 @@
     path: "{{ vault_path }}/{{ inventory_hostname }}"
     validate_certs: false
   register: vault_data
-  delegate_to: localhost
-  ignore_errors: yes
-  failed_when: false
+  delegate_to: localhost # by default runners have acl to vault_store
+  failed_when: false # if not have data on {{ inventory_hostname }}
   no_log: true
 
 - name: Rotate password
@@ -33,6 +32,6 @@
         root_plain: "{{ password_result.plaintext }}"
         root_hash: "{{ password_result.hash }}"
         last_rotated: "{{ ansible_date_time.iso8601 }}"
-  delegate_to: localhost
+  delegate_to: localhost # by default runners have acl to vault_store
   when: password_result.changed | default(false)
   no_log: true
