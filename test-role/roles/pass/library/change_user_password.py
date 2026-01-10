@@ -47,7 +47,6 @@ def run_module():
     length = module.params['password_length']
 
     try:
-        # Получаем текущий системный хеш
         system_hash = spwd.getspnam(username).sp_pwdp
 
         if not vault_hash or system_hash != vault_hash:
