@@ -1,0 +1,7 @@
+[MASTER]
+ignored-modules=ansible
+
+[MESSAGES CONTROL]
+disable=
+    invalid-name,
+    import-error,
