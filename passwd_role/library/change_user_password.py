@@ -169,8 +169,10 @@ def run_module():
         module.fail_json(msg=f"User {username} not found")
     except PermissionError as e:
         module.fail_json(msg=f"Permission denied accessing shadow file: {str(e)}")
-    except Exception as e:
-        module.fail_json(msg=f"Unexpected error: {str(e)}")
+    except OSError as e:
+        module.fail_json(msg=f"System error: {str(e)}")
+    except ValueError as e:
+        module.fail_json(msg=f"Invalid configuration: {str(e)}")
 
 
 def main():
@@ -180,3 +182,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
