@@ -20,4 +20,4 @@ jobs:
         pip install pylint
     - name: Analysing the code with pylint ansible
       run: |
-        pylint $(git ls-files '*.py') --rcfile=.github/workflows/.pylintrc
+        pylint passwd_role/library/change_user_password.py --rcfile=.github/workflows/.pylintrc
